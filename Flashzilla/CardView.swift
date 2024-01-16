@@ -7,9 +7,26 @@
 
 import SwiftUI
 
+// extension func instead of ternary within ternary
+extension Shape {
+    func fill(using offset: CGSize) -> some View {
+        if offset.width == 0 {
+            return self.fill(.white)
+        } else if offset.width < 0 {
+            return self.fill(.red)
+        } else {
+            return self.fill(.green)
+        }
+    }
+}
+
 struct CardView: View {
     let card: Card
-    var removal: (() -> Void)? = nil
+    // added bool param to track whether card is correct and should be removed
+    var removal: ((Bool) -> Void)? = nil
+    // var removal: (() -> Void)? = nil
+    
+    @State private var feedback = UINotificationFeedbackGenerator()
     
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
@@ -29,7 +46,11 @@ struct CardView: View {
                     differentiateWithoutColor
                     ? nil
                     : RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(offset.width > 0 ? .green : .red)
+                        .fill(using: offset)
+                    // too ternary --> confusing reading code
+                    //.fill(offset.width == 0 ? .white : offset.width > 0 ? .green : .red)
+                    // bug - when springing back into place card is red when supposed to be green
+                    //.fill(offset.width > 0 ? .green : .red)
                 )
                 .shadow(radius: 10)
             
@@ -65,11 +86,18 @@ struct CardView: View {
             DragGesture()
                 .onChanged { gesture in
                     offset = gesture.translation
+                    feedback.prepare()
                 }
                 .onEnded { _ in
                     if abs(offset.width) > 100 {
-                        // remove card
-                        removal?()
+                        if offset.width > 0 {
+                            feedback.notificationOccurred(.success)
+                            removal?(false)
+                        } else {
+                            feedback.notificationOccurred(.error)
+                            removal?(true)
+                            offset = .zero
+                        }
                         
                     } else {
                         offset = .zero

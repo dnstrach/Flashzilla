@@ -14,6 +14,8 @@
 		D8EC5D722B534882007381AF /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EC5D712B534882007381AF /* Card.swift */; };
 		D8EC5D742B534960007381AF /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EC5D732B534960007381AF /* CardView.swift */; };
 		D8EC5D762B55B3E9007381AF /* EditCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EC5D752B55B3E9007381AF /* EditCards.swift */; };
+		D8EC5D782B57189F007381AF /* FileManager-DocumentsDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EC5D772B57189F007381AF /* FileManager-DocumentsDirectory.swift */; };
+		D8EC5D7A2B571921007381AF /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EC5D792B571921007381AF /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		D8EC5D712B534882007381AF /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		D8EC5D732B534960007381AF /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		D8EC5D752B55B3E9007381AF /* EditCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCards.swift; sourceTree = "<group>"; };
+		D8EC5D772B57189F007381AF /* FileManager-DocumentsDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager-DocumentsDirectory.swift"; sourceTree = "<group>"; };
+		D8EC5D792B571921007381AF /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,8 +45,6 @@
 		D8EC5D572B5088D0007381AF = {
 			isa = PBXGroup;
 			children = (
-				D8EC5D732B534960007381AF /* CardView.swift */,
-				D8EC5D752B55B3E9007381AF /* EditCards.swift */,
 				D8EC5D622B5088D0007381AF /* Flashzilla */,
 				D8EC5D612B5088D0007381AF /* Products */,
 			);
@@ -59,11 +61,15 @@
 		D8EC5D622B5088D0007381AF /* Flashzilla */ = {
 			isa = PBXGroup;
 			children = (
+				D8EC5D732B534960007381AF /* CardView.swift */,
+				D8EC5D752B55B3E9007381AF /* EditCards.swift */,
 				D8EC5D632B5088D0007381AF /* FlashzillaApp.swift */,
 				D8EC5D652B5088D0007381AF /* ContentView.swift */,
 				D8EC5D672B5088D2007381AF /* Assets.xcassets */,
 				D8EC5D692B5088D2007381AF /* Preview Content */,
 				D8EC5D712B534882007381AF /* Card.swift */,
+				D8EC5D772B57189F007381AF /* FileManager-DocumentsDirectory.swift */,
+				D8EC5D792B571921007381AF /* DataManager.swift */,
 			);
 			path = Flashzilla;
 			sourceTree = "<group>";
@@ -146,8 +152,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8EC5D782B57189F007381AF /* FileManager-DocumentsDirectory.swift in Sources */,
 				D8EC5D662B5088D0007381AF /* ContentView.swift in Sources */,
 				D8EC5D722B534882007381AF /* Card.swift in Sources */,
+				D8EC5D7A2B571921007381AF /* DataManager.swift in Sources */,
 				D8EC5D742B534960007381AF /* CardView.swift in Sources */,
 				D8EC5D762B55B3E9007381AF /* EditCards.swift in Sources */,
 				D8EC5D642B5088D0007381AF /* FlashzillaApp.swift in Sources */,

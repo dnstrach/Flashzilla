@@ -5,6 +5,7 @@
 //  Created by Dominique Strachan on 1/11/24.
 //
 
+import CoreHaptics
 import SwiftUI
 
 extension View {
@@ -18,7 +19,8 @@ struct ContentView: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
     
-    @State private var cards = [Card]()
+    @State private var cards = DataManager.load()
+    //@State private var cards = [Card]()
     // 10 instances of example card
    // @State private var cards = [Card](repeating: Card.example, count: 10)
     
@@ -29,6 +31,9 @@ struct ContentView: View {
     @State private var isActive = true
     
     @State private var showingEditView = false
+    
+    @State private var answerIsCorrect = false
+    @State private var answerIsIncorrect = false
     
     var body: some View {
         // CardView(card: Card.example)
@@ -48,10 +53,15 @@ struct ContentView: View {
                     .clipShape(Capsule())
                 
                 ZStack {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        CardView(card: cards[index]) {
+                    ForEach(cards) { card in
+                        // find card through indices
+                   // ForEach(0..<cards.count, id: \.self) { index in
+                        //find card by giving its index
+                        let index = cards.firstIndex(of: card)!
+                        
+                        CardView(card: cards[index]) { reinsert in
                             withAnimation {
-                                removeCards(at: index)
+                                removeCards(at: index, reinsert: reinsert)
                             }
                         }
                         .stacked(at: index, in: cards.count)
@@ -98,9 +108,12 @@ struct ContentView: View {
                     
                     HStack {
                         Button {
+                            answerIsIncorrect = true
+                            
                             withAnimation {
-                                removeCards(at: cards.count - 1)
+                                removeCards(at: cards.count - 1, reinsert: true)
                             }
+                            
                         } label: {
                             Image(systemName: "xmark.circle")
                                 .padding()
@@ -109,13 +122,18 @@ struct ContentView: View {
                         }
                         .accessibilityLabel("Wrong")
                         .accessibilityHint("Mark your answer as being incorrect")
+                        .sensoryFeedback(.error, trigger: answerIsIncorrect)
+                        
                         
                         Spacer()
                         
                         Button {
+                            answerIsCorrect = true
+                            
                             withAnimation {
-                                removeCards(at: cards.count - 1)
+                                removeCards(at: cards.count - 1, reinsert: false)
                             }
+                            
                         } label: {
                             Image(systemName: "checkmark.circle")
                                 .padding()
@@ -124,6 +142,7 @@ struct ContentView: View {
                         }
                         .accessibilityLabel("Correct")
                         .accessibilityHint("Mark your answer as being correct")
+                        .sensoryFeedback(.success, trigger: answerIsCorrect)
                         
                         /* // before voice over enabled
                          Image(systemName: "xmark.circle")
@@ -167,29 +186,39 @@ struct ContentView: View {
         .onAppear(perform: resetCards)
     }
     
-    func loadData() {
-        if let data = UserDefaults.standard.data(forKey: "Cards") {
-            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
-            }
-        }
-    }
+//    func loadData() {
+//        if let data = UserDefaults.standard.data(forKey: "Cards") {
+//            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
+//                cards = decoded
+//            }
+//        }
+//    }
     
-    func removeCards(at index: Int) {
+    func removeCards(at index: Int, reinsert: Bool) {
         guard index >= 0 else { return }
         
-        cards.remove(at: index)
+        if reinsert {
+            cards.move(fromOffsets: IndexSet(integer: index), toOffset: 0)
+        } else {
+            cards.remove(at:  index)
+        }
+        
+        //cards.remove(at: index)
         
         if cards.isEmpty {
             isActive = false
         }
+        
+        answerIsCorrect = false
+        answerIsIncorrect = false
     }
     
     func resetCards() {
         // cards = [Card](repeating: Card.example, count: 10)
         timeRemaining = 100
         isActive = true
-        loadData()
+        cards = DataManager.load()
+        //loadData()
     }
 }
 
